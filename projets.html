@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projets | Bineta Diop</title>
+  <meta name="description" content="Projets SAÉ de Bineta Diop — Supervision Zabbix, automatisation Ansible, réseau informatique.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #06080f;
+      --bg2:    #0d1017;
+      --bg3:    #131720;
+      --border: rgba(255,255,255,0.07);
+      --text:   #e2e4ec;
+      --muted:  #8b909e;
+      --hl:     #76b5f5;
+      --font:   'Inter', sans-serif;
+      --mono:   'Fira Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.7; min-height: 100vh; overflow-x: hidden; }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+      background: rgba(6,8,15,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,.4); }
+    .logo { text-decoration: none; }
+    .logo-name { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--text); }
+    .logo-hl { color: var(--hl); }
+    .nav-links { display: flex; gap: .25rem; list-style: none; }
+    .nav-link { display: flex; align-items: center; gap: .4rem; padding: .4rem .75rem; border-radius: 6px; font-size: .85rem; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s, background .2s; }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,.05); }
+    .nav-link.active { color: var(--hl); background: rgba(118,181,245,.07); }
+    .nav-tag { font-family: var(--mono); font-size: .75rem; color: var(--hl); opacity: .7; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .5rem; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
+    .hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.is-open span:nth-child(2) { opacity: 0; }
+    .hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-overlay { display: none; position: fixed; inset: 64px 0 0; background: rgba(6,8,15,.97); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; }
+    .mobile-overlay.is-open { display: flex; }
+    .mobile-link { font-size: 1.2rem; font-weight: 600; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: .6rem; transition: color .2s; }
+    .mobile-link:hover { color: var(--text); }
+    .mobile-tag { font-family: var(--mono); color: var(--hl); font-size: .9rem; }
+    @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: flex; } }
+
+    /* ─── GLOW ─── */
+    .glow-a, .glow-b { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(130px); opacity: .12; }
+    .glow-a { width: 600px; height: 600px; background: #2a5cb8; top: -150px; left: -150px; }
+    .glow-b { width: 450px; height: 450px; background: #1a4fa8; bottom: 5%; right: -120px; }
+
+    /* ─── LAYOUT ─── */
+    main { position: relative; z-index: 1; padding-top: 64px; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header { padding: 4rem 0 1rem; }
+    .page-tag { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .75rem; color: var(--hl); margin-bottom: .75rem; }
+    .page-tag::before { content: '//'; opacity: .5; }
+    h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; line-height: 1.1; margin-bottom: 1rem; }
+    h1 .hl { color: var(--hl); }
+    .intro { color: var(--muted); max-width: 560px; font-size: .95rem; margin-bottom: 1.5rem; }
+
+    .header-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .hstat { font-size: .85rem; color: var(--muted); }
+    .hstat strong { color: var(--text); font-weight: 700; }
+    .hsep { color: var(--border); }
+
+    /* ─── PROJECT CARDS ─── */
+    .projects-section { padding: 2rem 0; }
+    .projects-grid { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent, #76b5f5);
+      border-radius: 12px; padding: 1.75rem;
+      text-decoration: none; color: inherit;
+      display: block;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      cursor: pointer;
+    }
+    .project-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.35); border-color: var(--accent, #76b5f5); }
+
+    .pc-top { display: flex; align-items: center; gap: .75rem; margin-bottom: .6rem; }
+    .pc-index { font-family: var(--mono); font-size: .75rem; color: var(--accent, #76b5f5); opacity: .8; }
+    .pc-highlight { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--accent, #76b5f5); background: rgba(118,181,245,.08); padding: .2rem .6rem; border-radius: 4px; }
+
+    .pc-title { font-size: 1.15rem; font-weight: 700; margin-bottom: .5rem; }
+    .pc-desc { font-size: .88rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+
+    .pc-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+    .pc-tag { font-family: var(--mono); font-size: .72rem; background: var(--bg3); border: 1px solid var(--border); color: var(--muted); padding: .2rem .55rem; border-radius: 4px; }
+
+    .pc-footer { display: flex; align-items: center; justify-content: space-between; }
+    .pc-cta { font-size: .83rem; color: var(--accent, #76b5f5); font-weight: 600; }
+    .pc-meta { font-size: .78rem; color: var(--muted); font-family: var(--mono); }
+
+    /* ─── DETAIL PANEL (accordéon) ─── */
+    .detail-panel { max-height: 0; overflow: hidden; transition: max-height .45s ease; }
+    .detail-inner {
+      border-top: 1px solid var(--border);
+      margin-top: 1.25rem; padding-top: 1.25rem;
+    }
+
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    @media (max-width: 600px) { .detail-grid { grid-template-columns: 1fr; } }
+
+    .detail-block h4 { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--hl); margin-bottom: .6rem; font-family: var(--mono); }
+    .detail-block ul { list-style: none; display: flex; flex-direction: column; gap: .3rem; }
+    .detail-block ul li { font-size: .84rem; color: var(--muted); display: flex; gap: .5rem; align-items: flex-start; }
+    .detail-block ul li::before { content: '▸'; color: var(--hl); font-size: .75rem; margin-top: 3px; flex-shrink: 0; }
+
+    .reflexive { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+    .reflexive-title { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--hl); font-family: var(--mono); margin-bottom: .5rem; }
+    .reflexive p { font-size: .85rem; color: var(--muted); line-height: 1.65; }
+
+    /* Galerie captures */
+    .captures-title { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--hl); font-family: var(--mono); margin-bottom: .75rem; }
+    .captures-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .75rem; }
+    .capture-item {
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+      overflow: hidden; aspect-ratio: 16/10;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; cursor: pointer;
+      transition: border-color .2s, transform .2s;
+    }
+    .capture-item:hover { border-color: rgba(118,181,245,.3); transform: scale(1.02); }
+    .capture-item img { width: 100%; height: 100%; object-fit: cover; }
+    .capture-placeholder { display: flex; flex-direction: column; align-items: center; gap: .4rem; padding: .75rem; text-align: center; }
+    .capture-placeholder span { font-size: .7rem; color: var(--muted); font-family: var(--mono); }
+    .capture-num { position: absolute; top: .4rem; right: .5rem; font-family: var(--mono); font-size: .65rem; color: var(--muted); }
+
+    /* ─── AC (apprentissages critiques) ─── */
+    .ac-section { margin-top: 1.25rem; }
+    .ac-title { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--hl); font-family: var(--mono); margin-bottom: .6rem; }
+    .ac-list { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .ac-badge {
+      font-family: var(--mono); font-size: .72rem;
+      background: rgba(118,181,245,.08); border: 1px solid rgba(118,181,245,.2);
+      color: var(--hl); padding: .25rem .7rem; border-radius: 20px;
+    }
+
+    /* ─── SECTION HEADING ─── */
+    .section-heading { margin: 3rem 0 1.5rem; }
+    .section-heading h2 { font-size: 1.4rem; font-weight: 700; }
+    .section-heading h2 .hl { color: var(--hl); }
+
+    /* ─── FOOTER ─── */
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 3rem 1.5rem 2rem; margin-top: 3rem; }
+    .footer-inner { max-width: 900px; margin: 0 auto; }
+    .footer-line { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+    .footer-line::before, .footer-line::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .line-tag { font-family: var(--mono); font-size: .7rem; color: var(--muted); }
+    .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; } }
+    .brand-logo { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--text); text-decoration: none; display: block; margin-bottom: .5rem; }
+    .brand-hl { color: var(--hl); }
+    .brand-desc { font-size: .82rem; color: var(--muted); line-height: 1.5; margin-bottom: .5rem; }
+    .brand-location { display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--muted); }
+    .loc-dot { color: var(--hl); }
+    .col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .75rem; }
+    .col-links { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+    .col-link { font-size: .85rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .col-link:hover { color: var(--text); }
+    .social { display: flex; align-items: center; gap: .4rem; }
+    .social-tag { font-family: var(--mono); font-size: .7rem; background: var(--bg3); padding: .1rem .35rem; border-radius: 4px; color: var(--hl); }
+    .footer-bottom { display: flex; align-items: center; gap: .75rem; font-size: .8rem; color: var(--muted); flex-wrap: wrap; }
+    .footer-sep { opacity: .4; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #48dc9c; display: inline-block; margin-right: .3rem; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="index.html" class="logo"><span class="logo-name">Bineta<span class="logo-hl">.io</span></span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link"><span class="nav-tag">~</span> Accueil</a></li>
+      <li><a href="about.html" class="nav-link"><span class="nav-tag">01</span> Moi</a></li>
+      <li><a href="competences.html" class="nav-link"><span class="nav-tag">02</span> Compétences</a></li>
+      <li><a href="projets.html" class="nav-link active"><span class="nav-tag">03</span> Projets</a></li>
+      <li><a href="contact.html" class="nav-link"><span class="nav-tag">04</span> Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-overlay" id="mobile-overlay">
+    <a href="index.html" class="mobile-link"><span class="mobile-tag">~</span> Accueil</a>
+    <a href="about.html" class="mobile-link"><span class="mobile-tag">01</span> Moi</a>
+    <a href="competences.html" class="mobile-link"><span class="mobile-tag">02</span> Compétences</a>
+    <a href="projets.html" class="mobile-link"><span class="mobile-tag">03</span> Projets</a>
+    <a href="contact.html" class="mobile-link"><span class="mobile-tag">04</span> Contact</a>
+  </div>
+
+  <div class="glow-a"></div>
+  <div class="glow-b"></div>
+
+  <main>
+    <div class="container">
+
+      <!-- PAGE HEADER -->
+      <header class="page-header">
+        <span class="page-tag">projets & SAÉ</span>
+        <h1>Mes <span class="hl">Projets</span></h1>
+        <p class="intro">Projets réalisés en alternance et en SAÉ — supervision, automatisation et infrastructure réseau.</p>
+        <div class="header-stats">
+          <span class="hstat"><strong>3</strong> projets</span>
+          <span class="hsep">·</span>
+          <span class="hstat"><strong>BUT3</strong> Parcours ROM</span>
+          <span class="hsep">·</span>
+          <span class="hstat"><strong>La Station Animation</strong> — IUT de Roanne</span>
+        </div>
+      </header>
+
+      <!-- PROJECTS -->
+      <section class="projects-section">
+        <div class="projects-grid">
+
+          <!-- ── PROJET 1 : ZABBIX ── -->
+          <div class="project-card" style="--accent:#48dc9c" onclick="toggleDetail('zabbix', this)">
+            <div class="pc-top">
+              <span class="pc-index">01</span>
+              <span class="pc-highlight" style="color:#48dc9c;background:rgba(72,220,156,.08)">SAÉ 5 · Alternance</span>
+            </div>
+            <h2 class="pc-title">Mise en place d'une solution de supervision réseau avec Zabbix</h2>
+            <p class="pc-desc">Déploiement d'une infrastructure de monitoring centralisée à La Station Animation permettant de superviser en temps réel les serveurs (CPU, mémoire, disque) et d'envoyer des alertes automatiques par e-mail lors de dépassements de seuils.</p>
+            <div class="pc-tags">
+              <span class="pc-tag">Zabbix 7.0</span>
+              <span class="pc-tag">Debian 12</span>
+              <span class="pc-tag">MariaDB</span>
+              <span class="pc-tag">Apache2</span>
+              <span class="pc-tag">Hyper-V</span>
+              <span class="pc-tag">SMTP</span>
+              <span class="pc-tag">Supervision</span>
+            </div>
+            <div class="pc-footer">
+              <span class="pc-cta" id="cta-zabbix">Voir le détail ↓</span>
+              <span class="pc-meta">Fév. 2025 · La Station Animation</span>
+            </div>
+
+            <!-- DÉTAIL -->
+            <div class="detail-panel" id="detail-zabbix">
+              <div class="detail-inner">
+
+                <div class="detail-grid">
+                  <div class="detail-block">
+                    <h4>Contexte & problématique</h4>
+                    <ul>
+                      <li>Parc hétérogène : serveurs Windows, postes clients, équipements réseau</li>
+                      <li>Aucun système de monitoring unifié → détection tardive des incidents</li>
+                      <li>Objectif : détecter automatiquement les pannes et réduire les temps d'arrêt</li>
+                    </ul>
+                  </div>
+                  <div class="detail-block">
+                    <h4>Ce que j'ai réalisé</h4>
+                    <ul>
+                      <li>Déploiement VM Debian 12 sous Hyper-V (4 Go RAM, 2 vCPU)</li>
+                      <li>Installation Zabbix Server 7.0 + MariaDB + Apache2/PHP</li>
+                      <li>Déploiement agents sur serveurs AJAR, EVA, GARY, PITT, NAS, Gestion</li>
+                      <li>Configuration alertes e-mail via SMTP Gmail (port 587)</li>
+                      <li>Création triggers CPU >60%, Mémoire >85%, Disque <15%</li>
+                      <li>Tableaux de bord de supervision personnalisés</li>
+                    </ul>
+                  </div>
+                  <div class="detail-block">
+                    <h4>Résultats obtenus</h4>
+                    <ul>
+                      <li>Supervision centralisée de 6 serveurs critiques</li>
+                      <li>Alertes e-mail fonctionnelles et testées (commande stress)</li>
+                      <li>Dashboards avec graphiques historiques CPU/RAM/Disque</li>
+                      <li>Export CSV des logs d'incidents</li>
+                    </ul>
+                  </div>
+                  <div class="detail-block">
+                    <h4>Difficultés & solutions</h4>
+                    <ul>
+                      <li>Dépôt Zabbix absent de Debian par défaut → ajout dépôt officiel manuellement</li>
+                      <li>Configuration SMTP Gmail → utilisation mot de passe d'application</li>
+                      <li>Agents Windows → règles pare-feu à ajouter manuellement</li>
+                      <li>Tests triggers → utilisation commande <code style="font-family:var(--mono);font-size:.8rem;color:var(--hl)">stress --cpu 8</code></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Analyse réflexive -->
+                <div class="reflexive">
+                  <div class="reflexive-title">// Analyse réflexive</div>
+                  <p>Ce projet m'a permis de comprendre concrètement les enjeux de la supervision dans un environnement de production réel. J'ai dû adapter mes choix techniques aux contraintes budgétaires de l'entreprise (solution open source), gérer une infrastructure hétérogène (Windows/Linux) et documenter chaque étape de manière professionnelle. La mise en place des triggers m'a appris à anticiper les incidents plutôt que de les subir.</p>
+                </div>
+
+                <!-- Apprentissages critiques -->
+                <div class="ac-section">
+                  <div class="ac-title">// Apprentissages critiques validés</div>
+                  <div class="ac-list">
+                    <span class="ac-badge">RT1 — Concevoir un réseau</span>
+                    <span class="ac-badge">RT3 — Déployer une solution</span>
+                    <span class="ac-badge">ROM1 — Superviser l'infrastructure</span>
+                    <span class="ac-badge">AC31.02 — Documentation technique</span>
+                    <span class="ac-badge">AC31.03 — Maquette de démonstration</span>
+                  </div>
+                </div>
+
+                <!-- Captures -->
+                <div style="margin-top:1.25rem">
+                  <div class="captures-title">// Captures du projet</div>
+                  <div class="captures-grid">
+                    <div class="capture-item">
+                      <!--
+                        POUR AJOUTER TES CAPTURES :
+                        Remplace chaque bloc par :
+                        <img src="assets/img/zabbix-dashboard.png" alt="Dashboard Zabbix">
+                      -->
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">🖥️</span>
+                        <span>Dashboard<br>Zabbix</span>
+                      </div>
+                      <span class="capture-num">/01</span>
+                    </div>
+                    <div class="capture-item">
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">📊</span>
+                        <span>Graphique<br>CPU</span>
+                      </div>
+                      <span class="capture-num">/02</span>
+                    </div>
+                    <div class="capture-item">
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">🔔</span>
+                        <span>Alerte<br>e-mail</span>
+                      </div>
+                      <span class="capture-num">/03</span>
+                    </div>
+                    <div class="capture-item">
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">⚙️</span>
+                        <span>Config<br>Trigger</span>
+                      </div>
+                      <span class="capture-num">/04</span>
+                    </div>
+                  </div>
+                  <p style="font-size:.75rem;color:var(--muted);margin-top:.5rem;font-family:var(--mono)">
+                    → Mets tes captures dans <code>assets/img/</code> et remplace les placeholders ci-dessus
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ── PROJET 2 : ANSIBLE ── -->
+          <div class="project-card" style="--accent:#b4a0fa" onclick="toggleDetail('ansible', this)">
+            <div class="pc-top">
+              <span class="pc-index">02</span>
+              <span class="pc-highlight" style="color:#b4a0fa;background:rgba(180,160,250,.08)">SAÉ 5 · Projet tuteuré</span>
+            </div>
+            <h2 class="pc-title">Mise en place d'un système de sauvegarde automatisé avec Ansible</h2>
+            <p class="pc-desc">Automatisation des sauvegardes d'infrastructure via des playbooks Ansible, permettant de garantir la continuité de service et la récupération rapide en cas de panne.</p>
+            <div class="pc-tags">
+              <span class="pc-tag">Ansible</span>
+              <span class="pc-tag">Bash</span>
+              <span class="pc-tag">Linux</span>
+              <span class="pc-tag">Automatisation</span>
+              <span class="pc-tag">Sauvegarde</span>
+              <span class="pc-tag">Cron</span>
+            </div>
+            <div class="pc-footer">
+              <span class="pc-cta" id="cta-ansible">Voir le détail ↓</span>
+              <span class="pc-meta">2024–2025 · IUT de Roanne</span>
+            </div>
+
+            <!-- DÉTAIL -->
+            <div class="detail-panel" id="detail-ansible">
+              <div class="detail-inner">
+
+                <div class="detail-grid">
+                  <div class="detail-block">
+                    <h4>Contexte & objectifs</h4>
+                    <ul>
+                      <li>Besoin d'automatiser les sauvegardes sur un parc de machines Linux</li>
+                      <li>Réduire les interventions manuelles répétitives</li>
+                      <li>Garantir la cohérence et la régularité des sauvegardes</li>
+                    </ul>
+                  </div>
+                  <div class="detail-block">
+                    <h4>Ce que j'ai réalisé</h4>
+                    <ul>
+                      <li>Écriture de playbooks Ansible pour automatiser les sauvegardes</li>
+                      <li>Scripts Bash pour la compression et rotation des archives</li>
+                      <li>Planification via Cron pour déclenchement automatique</li>
+                      <li>Tests de restauration pour valider l'intégrité des sauvegardes</li>
+                    </ul>
+                  </div>
+                  <div class="detail-block">
+                    <h4>Résultats obtenus</h4>
+                    <ul>
+                      <li>Sauvegardes automatisées sans intervention manuelle</li>
+                      <li>Rotation des archives paramétrée (conservation 30 jours)</li>
+                      <li>Documentation des playbooks pour la maintenabilité</li>
+                    </ul>
+                  </div>
+                  <div class="detail-block">
+                    <h4>Difficultés & solutions</h4>
+                    <ul>
+                      <li>Gestion des droits sudo dans Ansible → configuration sudoers adaptée</li>
+                      <li>Chemins de sauvegarde variables selon les machines → variables Ansible</li>
+                      <li>Vérification intégrité → ajout checksum MD5 dans les scripts</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="reflexive">
+                  <div class="reflexive-title">// Analyse réflexive</div>
+                  <p>Ce projet m'a permis de découvrir la puissance de l'automatisation avec Ansible. J'ai compris l'importance de l'idempotence dans les playbooks et la nécessité de tester les restaurations autant que les sauvegardes. Ce projet a renforcé ma capacité à anticiper les scénarios de panne et à concevoir des solutions robustes.</p>
+                </div>
+
+                <div class="ac-section">
+                  <div class="ac-title">// Apprentissages critiques validés</div>
+                  <div class="ac-list">
+                    <span class="ac-badge">RT3 — Piloter un projet applicatif</span>
+                    <span class="ac-badge">AC33.01 — Spécifications techniques</span>
+                    <span class="ac-badge">AC33.04 — Déployer une solution</span>
+                    <span class="ac-badge">ROM1 — Administrer l'infrastructure</span>
+                  </div>
+                </div>
+
+                <div style="margin-top:1.25rem">
+                  <div class="captures-title">// Captures du projet</div>
+                  <div class="captures-grid">
+                    <div class="capture-item">
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">📋</span>
+                        <span>Playbook<br>Ansible</span>
+                      </div>
+                      <span class="capture-num">/01</span>
+                    </div>
+                    <div class="capture-item">
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">🔄</span>
+                        <span>Exécution<br>Cron</span>
+                      </div>
+                      <span class="capture-num">/02</span>
+                    </div>
+                    <div class="capture-item">
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">✅</span>
+                        <span>Test<br>Restauration</span>
+                      </div>
+                      <span class="capture-num">/03</span>
+                    </div>
+                  </div>
+                  <p style="font-size:.75rem;color:var(--muted);margin-top:.5rem;font-family:var(--mono)">
+                    → Mets tes captures dans <code>assets/img/</code> et remplace les placeholders
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ── PROJET 3 : RÉSEAU IUT ── -->
+          <div class="project-card" style="--accent:#76b5f5" onclick="toggleDetail('reseau', this)">
+            <div class="pc-top">
+              <span class="pc-index">03</span>
+              <span class="pc-highlight" style="color:#76b5f5;background:rgba(118,181,245,.08)">SAÉ · IUT de Roanne</span>
+            </div>
+            <h2 class="pc-title">Projet réseau informatique — Architecture & Services</h2>
+            <p class="pc-desc">Conception et déploiement d'une infrastructure réseau complète intégrant Active Directory, DNS redondant, routage dynamique RIP/OSPF, DHCP, RADIUS et messagerie sous VMware.</p>
+            <div class="pc-tags">
+              <span class="pc-tag">Active Directory</span>
+              <span class="pc-tag">DNS redondant</span>
+              <span class="pc-tag">VMware</span>
+              <span class="pc-tag">RIP / OSPF</span>
+              <span class="pc-tag">DHCP</span>
+              <span class="pc-tag">RADIUS</span>
+              <span class="pc-tag">Messagerie</span>
+              <span class="pc-tag">Grafana</span>
+            </div>
+            <div class="pc-footer">
+              <span class="pc-cta" id="cta-reseau">Voir le détail ↓</span>
+              <span class="pc-meta">2024 · IUT de Roanne</span>
+            </div>
+
+            <!-- DÉTAIL -->
+            <div class="detail-panel" id="detail-reseau">
+              <div class="detail-inner">
+
+                <div class="detail-grid">
+                  <div class="detail-block">
+                    <h4>Ce que j'ai réalisé</h4>
+                    <ul>
+                      <li>Schéma IP avec subnetting optimisé</li>
+                      <li>Active Directory Domain Services + gestion des accès</li>
+                      <li>DNS redondant (primaire/secondaire) sous VMware</li>
+                      <li>Hébergement site web local (tests & intranet)</li>
+                      <li>Routage dynamique RIP et OSPF</li>
+                      <li>DHCP pour attribution automatique des adresses</li>
+                      <li>Mise en service RADIUS + solution de messagerie</li>
+                      <li>Supervision des performances via Grafana/Zabbix</li>
+                    </ul>
+                  </div>
+                  <div class="detail-block">
+                    <h4>Compétences mobilisées</h4>
+                    <ul>
+                      <li>Conception d'architecture réseau multi-services</li>
+                      <li>Administration Windows Server & Linux</li>
+                      <li>Virtualisation VMware</li>
+                      <li>Protocoles réseau avancés (RIP, OSPF, RADIUS)</li>
+                      <li>Gestion des identités (AD DS)</li>
+                      <li>Monitoring & tableaux de bord</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="reflexive">
+                  <div class="reflexive-title">// Analyse réflexive</div>
+                  <p>Ce projet m'a permis d'appréhender la complexité d'une infrastructure réseau complète en environnement virtualisé. La mise en place du DNS redondant et de l'AD DS m'a appris l'importance de la haute disponibilité. Le suivi via Grafana a confirmé mon intérêt pour la supervision des systèmes.</p>
+                </div>
+
+                <div class="ac-section">
+                  <div class="ac-title">// Apprentissages critiques validés</div>
+                  <div class="ac-list">
+                    <span class="ac-badge">RT1 — Administrer les réseaux</span>
+                    <span class="ac-badge">RT2 — Connecter les usagers</span>
+                    <span class="ac-badge">AC31.01 — Concevoir un réseau</span>
+                    <span class="ac-badge">AC32.01 — Déployer communication IP</span>
+                    <span class="ac-badge">ROM2 — Services multimédias</span>
+                  </div>
+                </div>
+
+                <div style="margin-top:1.25rem">
+                  <div class="captures-title">// Captures du projet</div>
+                  <div class="captures-grid">
+                    <div class="capture-item">
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">🗺️</span>
+                        <span>Schéma<br>réseau</span>
+                      </div>
+                      <span class="capture-num">/01</span>
+                    </div>
+                    <div class="capture-item">
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">🖥️</span>
+                        <span>Active<br>Directory</span>
+                      </div>
+                      <span class="capture-num">/02</span>
+                    </div>
+                    <div class="capture-item">
+                      <div class="capture-placeholder">
+                        <span style="font-size:1.2rem">📈</span>
+                        <span>Dashboard<br>Grafana</span>
+                      </div>
+                      <span class="capture-num">/03</span>
+                    </div>
+                  </div>
+                  <p style="font-size:.75rem;color:var(--muted);margin-top:.5rem;font-family:var(--mono)">
+                    → Mets tes captures dans <code>assets/img/</code> et remplace les placeholders
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-line"><span class="line-tag">END</span></div>
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="brand-logo">Bineta<span class="brand-hl">.io</span></a>
+          <p class="brand-desc">Étudiante BUT R&T — Parcours ROM<br>Alternante ingénieur support informatique</p>
+          <span class="brand-location"><span class="loc-dot">◉</span> Aubervilliers / Île-de-France</span>
+        </div>
+        <div>
+          <h4 class="col-title">Navigation</h4>
+          <ul class="col-links">
+            <li><a href="index.html" class="col-link">Accueil</a></li>
+            <li><a href="about.html" class="col-link">Moi</a></li>
+            <li><a href="competences.html" class="col-link">Compétences</a></li>
+            <li><a href="contact.html" class="col-link">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="col-title">Réseaux</h4>
+          <ul class="col-links">
+            <li><a href="https://linkedin.com/in/binetadiop-764b052bb" class="col-link social" target="_blank"><span class="social-tag">in</span> LinkedIn</a></li>
+            <li><a href="mailto:binetaadiop425@gmail.com" class="col-link social"><span class="social-tag">@</span> Email</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Bineta Diop</span>
+        <span class="footer-sep">·</span>
+        <span>BUT R&T — IUT de Roanne</span>
+        <span class="footer-sep">·</span>
+        <span><span class="status-dot"></span>En ligne</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Hamburger
+    const btn = document.getElementById('hamburger');
+    const overlay = document.getElementById('mobile-overlay');
+    let open = false;
+    btn.addEventListener('click', () => {
+      open = !open;
+      btn.classList.toggle('is-open', open);
+      overlay.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    overlay.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+      open = false; btn.classList.remove('is-open'); overlay.classList.remove('is-open'); document.body.style.overflow = '';
+    }));
+
+    // Accordéon projets
+    function toggleDetail(id, card) {
+      const panel = document.getElementById('detail-' + id);
+      const cta = document.getElementById('cta-' + id);
+      const isOpen = panel.style.maxHeight && panel.style.maxHeight !== '0px';
+
+      // Ferme tous
+      document.querySelectorAll('.detail-panel').forEach(p => p.style.maxHeight = '0');
+      document.querySelectorAll('.pc-cta').forEach(c => {
+        if (c.textContent.includes('↑')) c.textContent = c.textContent.replace('↑', '↓').replace('Fermer', 'Voir le détail');
+      });
+
+      if (!isOpen) {
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        cta.textContent = 'Fermer ↑';
+      }
+    }
+  </script>
+
+</body>
+</html>

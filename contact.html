@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Bineta Diop</title>
+  <meta name="description" content="Contacter Bineta Diop — Disponible pour une alternance dès septembre 2026.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #06080f;
+      --bg2:    #0d1017;
+      --bg3:    #131720;
+      --border: rgba(255,255,255,0.07);
+      --text:   #e2e4ec;
+      --muted:  #8b909e;
+      --hl:     #76b5f5;
+      --font:   'Inter', sans-serif;
+      --mono:   'Fira Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.7; min-height: 100vh; overflow-x: hidden; }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+      background: rgba(6,8,15,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,.4); }
+    .logo { text-decoration: none; }
+    .logo-name { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--text); }
+    .logo-hl { color: var(--hl); }
+    .nav-links { display: flex; gap: .25rem; list-style: none; }
+    .nav-link { display: flex; align-items: center; gap: .4rem; padding: .4rem .75rem; border-radius: 6px; font-size: .85rem; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s, background .2s; }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,.05); }
+    .nav-link.active { color: var(--hl); background: rgba(118,181,245,.07); }
+    .nav-tag { font-family: var(--mono); font-size: .75rem; color: var(--hl); opacity: .7; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .5rem; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
+    .hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.is-open span:nth-child(2) { opacity: 0; }
+    .hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-overlay { display: none; position: fixed; inset: 64px 0 0; background: rgba(6,8,15,.97); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; }
+    .mobile-overlay.is-open { display: flex; }
+    .mobile-link { font-size: 1.2rem; font-weight: 600; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: .6rem; transition: color .2s; }
+    .mobile-link:hover { color: var(--text); }
+    .mobile-tag { font-family: var(--mono); color: var(--hl); }
+    @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: flex; } }
+
+    /* ─── GLOW ─── */
+    .glow-a, .glow-b { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(130px); opacity: .12; }
+    .glow-a { width: 600px; height: 600px; background: #2a5cb8; top: -150px; left: -150px; }
+    .glow-b { width: 450px; height: 450px; background: #1a4fa8; bottom: 5%; right: -120px; }
+
+    /* ─── LAYOUT ─── */
+    main { position: relative; z-index: 1; padding-top: 64px; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header { padding: 4rem 0 3rem; }
+    .page-tag { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .75rem; color: var(--hl); margin-bottom: .75rem; }
+    .page-tag::before { content: '//'; opacity: .5; }
+    h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; line-height: 1.1; margin-bottom: 1rem; }
+    h1 .hl { color: var(--hl); }
+    .intro { color: var(--muted); max-width: 560px; font-size: .95rem; }
+
+    /* ─── DISPO BADGE ─── */
+    .dispo-badge {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: rgba(72,220,156,.08); border: 1px solid rgba(72,220,156,.2);
+      color: #48dc9c; font-size: .85rem; font-weight: 600;
+      padding: .5rem 1.1rem; border-radius: 24px;
+      margin-bottom: 2.5rem;
+    }
+    .dispo-dot { width: 8px; height: 8px; border-radius: 50%; background: #48dc9c; animation: pulse 2s infinite; flex-shrink: 0; }
+
+    /* ─── CONTACT GRID ─── */
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem; margin-bottom: 3rem;
+    }
+    @media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; } }
+
+    /* ─── CONTACT CARDS ─── */
+    .contact-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+      text-decoration: none; color: inherit;
+      display: flex; align-items: center; gap: 1rem;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .contact-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,.3);
+      border-color: rgba(118,181,245,.25);
+    }
+    .contact-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+      background: rgba(118,181,245,.1);
+    }
+    .contact-info { flex: 1; min-width: 0; }
+    .contact-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-family: var(--mono); margin-bottom: .2rem; }
+    .contact-value { font-size: .9rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .contact-arrow { color: var(--hl); font-size: .9rem; flex-shrink: 0; opacity: .6; }
+
+    /* ─── FORMULAIRE ─── */
+    .form-section { margin-bottom: 4rem; }
+    .form-heading { margin-bottom: 1.5rem; }
+    .section-tag { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .75rem; color: var(--hl); margin-bottom: .5rem; }
+    .section-tag::before { content: '//'; opacity: .5; }
+    h2 { font-size: 1.4rem; font-weight: 700; }
+    h2 .hl { color: var(--hl); }
+
+    .form-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 2rem;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
+    .form-group:last-of-type { margin-bottom: 0; }
+
+    label { font-size: .8rem; font-weight: 600; color: var(--muted); font-family: var(--mono); }
+    label span { color: var(--hl); }
+
+    input, textarea, select {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 8px; padding: .7rem 1rem;
+      color: var(--text); font-family: var(--font); font-size: .9rem;
+      outline: none; transition: border-color .2s, box-shadow .2s;
+      width: 100%;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(118,181,245,.4);
+      box-shadow: 0 0 0 3px rgba(118,181,245,.08);
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); opacity: .6; }
+    textarea { resize: vertical; min-height: 130px; }
+
+    .form-submit {
+      margin-top: 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .btn-send {
+      padding: .7rem 1.75rem; border-radius: 8px;
+      background: var(--hl); color: #06080f;
+      font-weight: 700; font-size: .9rem; border: none;
+      cursor: pointer; transition: opacity .2s, transform .2s;
+      font-family: var(--font);
+    }
+    .btn-send:hover { opacity: .85; transform: translateY(-1px); }
+    .form-note { font-size: .78rem; color: var(--muted); font-family: var(--mono); }
+
+    /* ─── SUCCESS MESSAGE ─── */
+    .form-success {
+      display: none; background: rgba(72,220,156,.08);
+      border: 1px solid rgba(72,220,156,.2); border-radius: 8px;
+      padding: 1rem 1.25rem; color: #48dc9c;
+      font-size: .88rem; margin-top: 1rem;
+    }
+
+    /* ─── FOOTER ─── */
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 3rem 1.5rem 2rem; }
+    .footer-inner { max-width: 900px; margin: 0 auto; }
+    .footer-line { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+    .footer-line::before, .footer-line::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .line-tag { font-family: var(--mono); font-size: .7rem; color: var(--muted); }
+    .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; } }
+    .brand-logo { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--text); text-decoration: none; display: block; margin-bottom: .5rem; }
+    .brand-hl { color: var(--hl); }
+    .brand-desc { font-size: .82rem; color: var(--muted); line-height: 1.5; margin-bottom: .5rem; }
+    .brand-location { display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--muted); }
+    .loc-dot { color: var(--hl); }
+    .col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .75rem; }
+    .col-links { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+    .col-link { font-size: .85rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .col-link:hover { color: var(--text); }
+    .social { display: flex; align-items: center; gap: .4rem; }
+    .social-tag { font-family: var(--mono); font-size: .7rem; background: var(--bg3); padding: .1rem .35rem; border-radius: 4px; color: var(--hl); }
+    .footer-bottom { display: flex; align-items: center; gap: .75rem; font-size: .8rem; color: var(--muted); flex-wrap: wrap; }
+    .footer-sep { opacity: .4; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #48dc9c; display: inline-block; margin-right: .3rem; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="index.html" class="logo"><span class="logo-name">Bineta<span class="logo-hl">.io</span></span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link"><span class="nav-tag">~</span> Accueil</a></li>
+      <li><a href="about.html" class="nav-link"><span class="nav-tag">01</span> Moi</a></li>
+      <li><a href="competences.html" class="nav-link"><span class="nav-tag">02</span> Compétences</a></li>
+      <li><a href="projets.html" class="nav-link"><span class="nav-tag">03</span> Projets</a></li>
+      <li><a href="contact.html" class="nav-link active"><span class="nav-tag">04</span> Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-overlay" id="mobile-overlay">
+    <a href="index.html" class="mobile-link"><span class="mobile-tag">~</span> Accueil</a>
+    <a href="about.html" class="mobile-link"><span class="mobile-tag">01</span> Moi</a>
+    <a href="competences.html" class="mobile-link"><span class="mobile-tag">02</span> Compétences</a>
+    <a href="projets.html" class="mobile-link"><span class="mobile-tag">03</span> Projets</a>
+    <a href="contact.html" class="mobile-link"><span class="mobile-tag">04</span> Contact</a>
+  </div>
+
+  <div class="glow-a"></div>
+  <div class="glow-b"></div>
+
+  <main>
+    <div class="container">
+
+      <!-- PAGE HEADER -->
+      <section class="page-header">
+        <span class="page-tag">contact</span>
+        <h1>Me <span class="hl">Contacter</span></h1>
+        <p class="intro">Disponible pour une alternance dès septembre 2026 en Master 1 Systèmes, Réseaux & Cloud. N'hésite pas à me contacter !</p>
+      </section>
+
+      <!-- BADGE DISPONIBILITÉ -->
+      <div class="dispo-badge">
+        <span class="dispo-dot"></span>
+        Disponible pour une alternance — Septembre 2026 · Île-de-France / Paris
+      </div>
+
+      <!-- CARTES DE CONTACT -->
+      <div class="contact-grid">
+
+        <a href="mailto:binetaadiop425@gmail.com" class="contact-card">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-info">
+            <div class="contact-label">Email</div>
+            <div class="contact-value">binetaadiop425@gmail.com</div>
+          </div>
+          <span class="contact-arrow">→</span>
+        </a>
+
+        <a href="tel:+33744711727" class="contact-card">
+          <div class="contact-icon">📱</div>
+          <div class="contact-info">
+            <div class="contact-label">Téléphone</div>
+            <div class="contact-value">+33 7 44 71 17 27</div>
+          </div>
+          <span class="contact-arrow">→</span>
+        </a>
+
+        <a href="https://linkedin.com/in/binetadiop-764b052bb" class="contact-card" target="_blank" rel="noopener">
+          <div class="contact-icon" style="background:rgba(10,102,194,.15)">💼</div>
+          <div class="contact-info">
+            <div class="contact-label">LinkedIn</div>
+            <div class="contact-value">linkedin.com/in/binetadiop</div>
+          </div>
+          <span class="contact-arrow">→</span>
+        </a>
+
+        <a href="assets/docs/cv.pdf" class="contact-card" target="_blank">
+          <div class="contact-icon" style="background:rgba(72,220,156,.1)">📄</div>
+          <div class="contact-info">
+            <div class="contact-label">Mon CV</div>
+            <div class="contact-value">Télécharger le PDF</div>
+          </div>
+          <span class="contact-arrow">↓</span>
+        </a>
+
+      </div>
+
+      <!-- FORMULAIRE -->
+      <section class="form-section">
+        <div class="form-heading">
+          <span class="section-tag">formulaire</span>
+          <h2>Envoyer un <span class="hl">message</span></h2>
+        </div>
+
+        <div class="form-card">
+          <form id="contact-form" onsubmit="handleSubmit(event)">
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nom">Nom <span>*</span></label>
+                <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email <span>*</span></label>
+                <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="sujet">Sujet <span>*</span></label>
+              <input type="text" id="sujet" name="sujet" placeholder="Ex : Proposition d'alternance — Master 1 Réseaux" required>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message <span>*</span></label>
+              <textarea id="message" name="message" placeholder="Décrivez votre offre ou votre question..." required></textarea>
+            </div>
+
+            <div class="form-submit">
+              <button type="submit" class="btn-send">Envoyer le message →</button>
+              <span class="form-note">// Je réponds sous 48h</span>
+            </div>
+
+            <div class="form-success" id="form-success">
+              ✓ Message envoyé ! Je te répondrai dans les plus brefs délais.
+            </div>
+
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-line"><span class="line-tag">END</span></div>
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="brand-logo">Bineta<span class="brand-hl">.io</span></a>
+          <p class="brand-desc">Étudiante BUT R&T — Parcours ROM<br>Alternante ingénieur support informatique</p>
+          <span class="brand-location"><span class="loc-dot">◉</span> Aubervilliers / Île-de-France</span>
+        </div>
+        <div>
+          <h4 class="col-title">Navigation</h4>
+          <ul class="col-links">
+            <li><a href="index.html" class="col-link">Accueil</a></li>
+            <li><a href="about.html" class="col-link">Moi</a></li>
+            <li><a href="competences.html" class="col-link">Compétences</a></li>
+            <li><a href="projets.html" class="col-link">Projets</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="col-title">Réseaux</h4>
+          <ul class="col-links">
+            <li><a href="https://linkedin.com/in/binetadiop-764b052bb" class="col-link social" target="_blank"><span class="social-tag">in</span> LinkedIn</a></li>
+            <li><a href="mailto:binetaadiop425@gmail.com" class="col-link social"><span class="social-tag">@</span> Email</a></li>
+            <li><a href="tel:+33744711727" class="col-link social"><span class="social-tag">☎</span> +33 7 44 71 17 27</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Bineta Diop</span>
+        <span class="footer-sep">·</span>
+        <span>BUT R&T — IUT de Roanne</span>
+        <span class="footer-sep">·</span>
+        <span><span class="status-dot"></span>En ligne</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Hamburger
+    const btn = document.getElementById('hamburger');
+    const overlay = document.getElementById('mobile-overlay');
+    let open = false;
+    btn.addEventListener('click', () => {
+      open = !open;
+      btn.classList.toggle('is-open', open);
+      overlay.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    overlay.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+      open = false; btn.classList.remove('is-open'); overlay.classList.remove('is-open'); document.body.style.overflow = '';
+    }));
+
+    // Formulaire — ouvre le client mail avec les infos pré-remplies
+    function handleSubmit(e) {
+      e.preventDefault();
+      const nom     = document.getElementById('nom').value;
+      const email   = document.getElementById('email').value;
+      const sujet   = document.getElementById('sujet').value;
+      const message = document.getElementById('message').value;
+
+      const body = encodeURIComponent(
+        `Nom : ${nom}\nEmail : ${email}\n\n${message}`
+      );
+      const subject = encodeURIComponent(sujet);
+
+      // Ouvre le client mail avec les données du formulaire
+      window.location.href = `mailto:binetaadiop425@gmail.com?subject=${subject}&body=${body}`;
+
+      // Affiche le message de confirmation
+      document.getElementById('form-success').style.display = 'block';
+      document.getElementById('contact-form').reset();
+    }
+  </script>
+
+</body>
+</html>

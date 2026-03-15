@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compétences | Bineta Diop</title>
+  <meta name="description" content="Portfolio de Bineta Diop — Étudiante BUT R&T parcours ROM, alternante ingénieur support informatique à La Station Animation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #06080f;
+      --bg2:      #0d1017;
+      --bg3:      #131720;
+      --border:   rgba(255,255,255,0.07);
+      --text:     #e2e4ec;
+      --muted:    #8b909e;
+      --hl:       #76b5f5;
+      --font:     'Inter', sans-serif;
+      --mono:     'Fira Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: rgba(6,8,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,.4); }
+
+    .logo { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+    .logo-name {
+      font-family: var(--mono);
+      font-size: 1rem; font-weight: 600;
+      color: var(--text);
+    }
+    .logo-hl { color: var(--hl); }
+
+    .nav-links { display: flex; gap: .25rem; list-style: none; }
+    .nav-link {
+      display: flex; align-items: center; gap: .4rem;
+      padding: .4rem .75rem; border-radius: 6px;
+      font-size: .85rem; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+      transition: color .2s, background .2s;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--text); background: rgba(255,255,255,.05); }
+    .nav-link.active { color: var(--hl); }
+    .nav-tag { font-family: var(--mono); font-size: .75rem; color: var(--hl); opacity: .7; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .5rem; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
+
+    /* ─── MOBILE OVERLAY ─── */
+    .mobile-overlay {
+      display: none; position: fixed; inset: 64px 0 0;
+      background: rgba(6,8,15,.97); z-index: 99;
+      flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+    }
+    .mobile-overlay.is-open { display: flex; }
+    .mobile-link {
+      font-size: 1.2rem; font-weight: 600; color: var(--muted);
+      text-decoration: none; display: flex; align-items: center; gap: .5rem;
+      transition: color .2s;
+    }
+    .mobile-link:hover { color: var(--text); }
+    .mobile-tag { font-family: var(--mono); color: var(--hl); font-size: .9rem; }
+
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ─── AMBIENT GLOW ─── */
+    .glow-a, .glow-b {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 0;
+      filter: blur(120px); opacity: .12;
+    }
+    .glow-a { width: 500px; height: 500px; background: #3b6fd4; top: -100px; left: -100px; }
+    .glow-b { width: 400px; height: 400px; background: #1a4fa8; bottom: 10%; right: -100px; }
+
+    /* ─── LAYOUT ─── */
+    main { position: relative; z-index: 1; padding-top: 64px; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header { padding: 4rem 0 2.5rem; }
+    .page-tag {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: var(--mono); font-size: .75rem;
+      color: var(--hl); margin-bottom: .75rem;
+    }
+    .page-tag::before { content: '//'; opacity: .5; }
+    h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; line-height: 1.1; margin-bottom: 1rem; }
+    h1 .hl { color: var(--hl); }
+    .intro { color: var(--muted); max-width: 560px; font-size: .95rem; }
+
+    /* ─── SECTION HEADING ─── */
+    .section-heading { margin-bottom: 2rem; }
+    .section-heading h2 { font-size: 1.5rem; font-weight: 700; }
+    .section-heading h2 .hl { color: var(--hl); }
+
+    /* ─── SKILL CARDS ─── */
+    .skills-section { padding: 2rem 0 3rem; }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+
+    .skill-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--accent, #76b5f5);
+      border-radius: 10px;
+      padding: 1.4rem;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .skill-card:hover {
+      border-color: var(--accent, #76b5f5);
+      box-shadow: 0 4px 24px rgba(0,0,0,.3);
+      transform: translateY(-2px);
+    }
+    .skill-card-header { display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem; }
+    .skill-icon { font-size: 1.1rem; color: var(--accent, #76b5f5); }
+    .skill-card h3 { font-size: .9rem; font-weight: 600; line-height: 1.3; }
+
+    .skill-list { list-style: none; display: flex; flex-direction: column; gap: .35rem; }
+    .skill-list li { display: flex; align-items: flex-start; gap: .5rem; font-size: .85rem; color: var(--muted); }
+    .skill-bullet { color: var(--accent, #76b5f5); font-size: .8rem; margin-top: 3px; flex-shrink: 0; }
+
+    /* ─── RÉFÉRENTIEL ACCORDÉON ─── */
+    .referentiel-section { padding: 1rem 0 3rem; }
+
+    .ref-list { display: flex; flex-direction: column; gap: .5rem; }
+    .ref-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .ref-item.open { border-color: rgba(118,181,245,.25); }
+
+    .ref-header {
+      width: 100%; background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem; text-align: left; color: var(--text);
+      transition: background .2s;
+    }
+    .ref-header:hover { background: rgba(255,255,255,.03); }
+
+    .ref-num { font-family: var(--mono); font-size: .75rem; color: var(--hl); min-width: 28px; opacity: .7; }
+    .ref-code { font-size: .9rem; font-weight: 600; flex: 1; }
+    .ref-level {
+      font-family: var(--mono); font-size: .7rem;
+      color: var(--muted); white-space: nowrap;
+    }
+    .ref-chevron {
+      font-size: 1.1rem; color: var(--hl);
+      transition: transform .3s; flex-shrink: 0;
+    }
+
+    .ref-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+    .ref-body-inner { padding: 0 1.25rem 1.25rem 3.5rem; }
+
+    .ref-ul { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+    .ref-ul li { display: flex; align-items: flex-start; gap: .6rem; font-size: .85rem; color: var(--muted); }
+    .ref-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--hl); flex-shrink: 0; margin-top: 8px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 2rem;
+      margin-top: 2rem;
+    }
+    .footer-inner { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .footer-line {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .footer-line::before, .footer-line::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .line-tag { font-family: var(--mono); font-size: .7rem; color: var(--muted); }
+    .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; } }
+
+    .brand-logo { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--text); text-decoration: none; display: block; margin-bottom: .5rem; }
+    .brand-hl { color: var(--hl); }
+    .brand-desc { font-size: .82rem; color: var(--muted); line-height: 1.5; margin-bottom: .5rem; }
+    .brand-location { display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--muted); }
+    .loc-dot { color: var(--hl); }
+
+    .col-title { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .75rem; }
+    .col-links { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+    .col-link { font-size: .85rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .col-link:hover { color: var(--text); }
+    .social { display: flex; align-items: center; gap: .4rem; }
+    .social-tag { font-family: var(--mono); font-size: .7rem; background: var(--bg3); padding: .1rem .35rem; border-radius: 4px; color: var(--hl); }
+
+    .footer-bottom { display: flex; align-items: center; gap: .75rem; font-size: .8rem; color: var(--muted); flex-wrap: wrap; }
+    .copy-sym { margin-right: .2rem; }
+    .footer-sep { opacity: .4; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #48dc9c; display: inline-block; margin-right: .3rem; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="index.html" class="logo">
+      <span class="logo-name">Bineta<span class="logo-hl">.io</span></span>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="nav-link"><span class="nav-tag">~</span> Accueil</a></li>
+      <li><a href="about.html" class="nav-link"><span class="nav-tag">01</span> Moi</a></li>
+      <li><a href="competences.html" class="nav-link active"><span class="nav-tag">02</span> Compétences</a></li>
+      <li><a href="projets.html" class="nav-link"><span class="nav-tag">03</span> Projets</a></li>
+      <li><a href="contact.html" class="nav-link"><span class="nav-tag">04</span> Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MENU MOBILE -->
+  <div class="mobile-overlay" id="mobile-overlay">
+    <a href="index.html" class="mobile-link"><span class="mobile-tag">~</span> Accueil</a>
+    <a href="about.html" class="mobile-link"><span class="mobile-tag">01</span> Moi</a>
+    <a href="competences.html" class="mobile-link"><span class="mobile-tag">02</span> Compétences</a>
+    <a href="projets.html" class="mobile-link"><span class="mobile-tag">03</span> Projets</a>
+    <a href="contact.html" class="mobile-link"><span class="mobile-tag">04</span> Contact</a>
+  </div>
+
+  <div class="glow-a"></div>
+  <div class="glow-b"></div>
+
+  <main>
+    <div class="container">
+
+      <!-- PAGE HEADER -->
+      <section class="page-header">
+        <span class="page-tag">compétences</span>
+        <h1>Compétences <span class="hl">Techniques</span></h1>
+        <p class="intro">Expertise acquise durant mon parcours en Réseaux & Télécommunications, parcours ROM, et mon alternance à La Station Animation.</p>
+      </section>
+
+      <!-- SKILL CARDS -->
+      <section class="skills-section">
+        <div class="skills-grid">
+
+          <div class="skill-card" style="--accent: #76b5f5">
+            <div class="skill-card-header">
+              <span class="skill-icon">◈</span>
+              <h3>Systèmes & Administration</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Windows Server / Active Directory</span></li>
+              <li><span class="skill-bullet">▸</span><span>Linux (Debian, Ubuntu)</span></li>
+              <li><span class="skill-bullet">▸</span><span>VMware / Hyper-V</span></li>
+              <li><span class="skill-bullet">▸</span><span>Docker (conteneurisation)</span></li>
+              <li><span class="skill-bullet">▸</span><span>Scripts PowerShell / Bash / Ansible</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #48dc9c">
+            <div class="skill-card-header">
+              <span class="skill-icon">⬡</span>
+              <h3>Réseaux & Infrastructure</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>WAN/LAN, TCP/IP, DHCP/DNS</span></li>
+              <li><span class="skill-bullet">▸</span><span>Routeurs/commutateurs Cisco</span></li>
+              <li><span class="skill-bullet">▸</span><span>RIP / OSPF (routage dynamique)</span></li>
+              <li><span class="skill-bullet">▸</span><span>VPN & Pare-feu</span></li>
+              <li><span class="skill-bullet">▸</span><span>RADIUS / Messagerie</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #ff9f70">
+            <div class="skill-card-header">
+              <span class="skill-icon">◎</span>
+              <h3>Supervision & Monitoring</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Zabbix (déploiement complet)</span></li>
+              <li><span class="skill-bullet">▸</span><span>Grafana (tableaux de bord)</span></li>
+              <li><span class="skill-bullet">▸</span><span>Alertes e-mail & triggers</span></li>
+              <li><span class="skill-bullet">▸</span><span>Supervision CPU/Mémoire/Disque</span></li>
+              <li><span class="skill-bullet">▸</span><span>MariaDB / Apache2</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #b4a0fa">
+            <div class="skill-card-header">
+              <span class="skill-icon">◇</span>
+              <h3>Téléphonie IP & ROM</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Administration 3CX</span></li>
+              <li><span class="skill-bullet">▸</span><span>Extensions, groupes & SDA</span></li>
+              <li><span class="skill-bullet">▸</span><span>Création comptes VPN</span></li>
+              <li><span class="skill-bullet">▸</span><span>Support terrain & continuité</span></li>
+              <li><span class="skill-bullet">▸</span><span>Sauvegardes & suivi utilisateurs</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #f5d76e">
+            <div class="skill-card-header">
+              <span class="skill-icon">◉</span>
+              <h3>Développement & Projet</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Python / Bash / Ansible</span></li>
+              <li><span class="skill-bullet">▸</span><span>C, HTML/CSS</span></li>
+              <li><span class="skill-bullet">▸</span><span>Méthode Scrum</span></li>
+              <li><span class="skill-bullet">▸</span><span>Gantt & PERT</span></li>
+              <li><span class="skill-bullet">▸</span><span>Documentation technique</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #f07070">
+            <div class="skill-card-header">
+              <span class="skill-icon">⬢</span>
+              <h3>Support & Helpdesk</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Diagnostic & résolution incidents</span></li>
+              <li><span class="skill-bullet">▸</span><span>Déploiement logiciels & postes</span></li>
+              <li><span class="skill-bullet">▸</span><span>Gestion licences & conformité</span></li>
+              <li><span class="skill-bullet">▸</span><span>Solutions télétravail (VPN)</span></li>
+              <li><span class="skill-bullet">▸</span><span>Gestion parc informatique</span></li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RÉFÉRENTIEL BUT ROM -->
+      <section class="referentiel-section">
+        <div class="section-heading">
+          <span class="page-tag">référentiel</span>
+          <h2>Compétences <span class="hl">d'après le référentiel BUT ROM</span></h2>
+        </div>
+
+        <div class="ref-list">
+
+          <div class="ref-item" id="ref-0">
+            <button class="ref-header" onclick="toggleRef(0)">
+              <span class="ref-num">RT1</span>
+              <span class="ref-code">Administrer les réseaux et l'Internet</span>
+              <span class="ref-level">Niveau 3 — Concevoir un réseau</span>
+              <span class="ref-chevron">›</span>
+            </button>
+            <div class="ref-body" id="ref-body-0">
+              <div class="ref-body-inner">
+                <ul class="ref-ul">
+                  <li><span class="ref-dot"></span>Concevoir un projet réseau en intégrant haute disponibilité, QoS, sécurité et supervision</li>
+                  <li><span class="ref-dot"></span>Réaliser la documentation technique du projet</li>
+                  <li><span class="ref-dot"></span>Réaliser une maquette de démonstration (ex : infrastructure Zabbix sur VM Debian)</li>
+                  <li><span class="ref-dot"></span>Défendre et argumenter un projet devant les tuteurs</li>
+                  <li><span class="ref-dot"></span>Gérer le projet et respecter les délais (Scrum, Gantt)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-item" id="ref-1">
+            <button class="ref-header" onclick="toggleRef(1)">
+              <span class="ref-num">RT2</span>
+              <span class="ref-code">Connecter les entreprises et les usagers</span>
+              <span class="ref-level">Niveau 3 — Déployer une solution IP</span>
+              <span class="ref-chevron">›</span>
+            </button>
+            <div class="ref-body" id="ref-body-1">
+              <div class="ref-body-inner">
+                <ul class="ref-ul">
+                  <li><span class="ref-dot"></span>Déployer un système de communication pour l'entreprise (3CX, VoIP, messagerie)</li>
+                  <li><span class="ref-dot"></span>Déployer un réseau d'accès sans fil sécurisé en entreprise</li>
+                  <li><span class="ref-dot"></span>Permettre aux collaborateurs de se connecter de manière sécurisée (VPN, pare-feu)</li>
+                  <li><span class="ref-dot"></span>Mise en place des solutions de télétravail pour les équipes à distance</li>
+                  <li><span class="ref-dot"></span>Collaborer en mode projet en français et en anglais</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-item" id="ref-2">
+            <button class="ref-header" onclick="toggleRef(2)">
+              <span class="ref-num">RT3</span>
+              <span class="ref-code">Créer des outils et des applications R&T</span>
+              <span class="ref-level">Niveau 3 — Piloter un projet applicatif</span>
+              <span class="ref-chevron">›</span>
+            </button>
+            <div class="ref-body" id="ref-body-2">
+              <div class="ref-body-inner">
+                <ul class="ref-ul">
+                  <li><span class="ref-dot"></span>Élaborer les spécifications techniques et le cahier des charges (projet Ansible / Zabbix)</li>
+                  <li><span class="ref-dot"></span>Mettre en place un environnement de travail collaboratif informatique</li>
+                  <li><span class="ref-dot"></span>Déployer et maintenir une solution informatique (scripts Bash/Ansible, sauvegardes)</li>
+                  <li><span class="ref-dot"></span>Sécuriser l'environnement numérique d'une application</li>
+                  <li><span class="ref-dot"></span>S'informer sur les évolutions et nouveautés technologiques (veille SAÉ 6)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-item" id="ref-3">
+            <button class="ref-header" onclick="toggleRef(3)">
+              <span class="ref-num">ROM1</span>
+              <span class="ref-code">Gérer les infrastructures et services des réseaux opérateurs</span>
+              <span class="ref-level">Niveau 2 — Administrer les services télécom</span>
+              <span class="ref-chevron">›</span>
+            </button>
+            <div class="ref-body" id="ref-body-3">
+              <div class="ref-body-inner">
+                <ul class="ref-ul">
+                  <li><span class="ref-dot"></span>Administrer et superviser les infrastructures et services télécom (3CX, Station Animation)</li>
+                  <li><span class="ref-dot"></span>Paramétrage des extensions, groupes et SDA sur le PABX IP</li>
+                  <li><span class="ref-dot"></span>Suivi en temps réel des statuts utilisateurs et continuité de service</li>
+                  <li><span class="ref-dot"></span>Administrer et déployer des fonctions réseaux virtualisées (VM Hyper-V, DNS redondant)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-item" id="ref-4">
+            <button class="ref-header" onclick="toggleRef(4)">
+              <span class="ref-num">ROM2</span>
+              <span class="ref-code">Gérer les communications unifiées et la vidéo sur Internet</span>
+              <span class="ref-level">Niveau 2 — Administrer les services multimédias</span>
+              <span class="ref-chevron">›</span>
+            </button>
+            <div class="ref-body" id="ref-body-4">
+              <div class="ref-body-inner">
+                <ul class="ref-ul">
+                  <li><span class="ref-dot"></span>Administrer les services multimédias pour une entreprise (téléphonie IP, 3CX)</li>
+                  <li><span class="ref-dot"></span>Mise en service de RADIUS et d'une solution de messagerie</span></li>
+                  <li><span class="ref-dot"></span>Support aux équipes terrain pour garantir la continuité des appels</li>
+                  <li><span class="ref-dot"></span>Hébergement d'un site web en local pour tests et intranet</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div><!-- /container -->
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-line"><span class="line-tag">END</span></div>
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="brand-logo">Bineta<span class="brand-hl">.io</span></a>
+          <p class="brand-desc">Étudiante BUT R&T — Parcours ROM<br>Alternante ingénieur support informatique</p>
+          <span class="brand-location"><span class="loc-dot">◉</span>Aubervilliers / Île-de-France</span>
+        </div>
+        <div>
+          <h4 class="col-title">Navigation</h4>
+          <ul class="col-links">
+            <li><a href="index.html" class="col-link">Accueil</a></li>
+            <li><a href="about.html" class="col-link">Moi</a></li>
+            <li><a href="projets.html" class="col-link">Projets</a></li>
+            <li><a href="contact.html" class="col-link">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="col-title">Réseaux</h4>
+          <ul class="col-links">
+            <li><a href="https://linkedin.com/in/binetadiop-764b052bb" class="col-link social" target="_blank"><span class="social-tag">in</span> LinkedIn</a></li>
+            <li><a href="mailto:binetaadiop425@gmail.com" class="col-link social"><span class="social-tag">@</span> Email</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span><span class="copy-sym">©</span>2026 Bineta Diop</span>
+        <span class="footer-sep">·</span>
+        <span>Fait avec HTML/CSS & ☕</span>
+        <span class="footer-sep">·</span>
+        <span><span class="status-dot"></span>En ligne</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Hamburger
+    const btn = document.getElementById('hamburger');
+    const overlay = document.getElementById('mobile-overlay');
+    let open = false;
+    btn.addEventListener('click', () => {
+      open = !open;
+      btn.classList.toggle('is-open', open);
+      overlay.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    overlay.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+      open = false; btn.classList.remove('is-open'); overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }));
+
+    // Accordéon
+    function toggleRef(i) {
+      const body = document.getElementById('ref-body-' + i);
+      const item = document.getElementById('ref-' + i);
+      const chevron = item.querySelector('.ref-chevron');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.ref-item').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('.ref-body').style.maxHeight = '0';
+        el.querySelector('.ref-chevron').style.transform = 'rotate(0deg)';
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+        chevron.style.transform = 'rotate(90deg)';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => toggleRef(0));
+  </script>
+
+</body>
+</html>

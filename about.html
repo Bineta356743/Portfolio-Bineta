@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moi | Bineta Diop</title>
+  <meta name="description" content="Qui est Bineta Diop — Étudiante BUT R&T parcours ROM, alternante ingénieur support informatique à La Station Animation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #06080f;
+      --bg2:    #0d1017;
+      --bg3:    #131720;
+      --border: rgba(255,255,255,0.07);
+      --text:   #e2e4ec;
+      --muted:  #8b909e;
+      --hl:     #76b5f5;
+      --font:   'Inter', sans-serif;
+      --mono:   'Fira Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.7; min-height: 100vh; overflow-x: hidden; }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+      background: rgba(6,8,15,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,.4); }
+    .logo { text-decoration: none; }
+    .logo-name { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--text); }
+    .logo-hl { color: var(--hl); }
+    .nav-links { display: flex; gap: .25rem; list-style: none; }
+    .nav-link { display: flex; align-items: center; gap: .4rem; padding: .4rem .75rem; border-radius: 6px; font-size: .85rem; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s, background .2s; }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,.05); }
+    .nav-link.active { color: var(--hl); background: rgba(118,181,245,.07); }
+    .nav-tag { font-family: var(--mono); font-size: .75rem; color: var(--hl); opacity: .7; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .5rem; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
+    .hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.is-open span:nth-child(2) { opacity: 0; }
+    .hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-overlay { display: none; position: fixed; inset: 64px 0 0; background: rgba(6,8,15,.97); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; }
+    .mobile-overlay.is-open { display: flex; }
+    .mobile-link { font-size: 1.2rem; font-weight: 600; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: .6rem; transition: color .2s; }
+    .mobile-link:hover { color: var(--text); }
+    .mobile-tag { font-family: var(--mono); color: var(--hl); }
+    @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: flex; } }
+
+    /* ─── GLOW ─── */
+    .glow-a, .glow-b { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(130px); opacity: .12; }
+    .glow-a { width: 600px; height: 600px; background: #2a5cb8; top: -150px; left: -150px; }
+    .glow-b { width: 450px; height: 450px; background: #1a4fa8; bottom: 5%; right: -120px; }
+
+    /* ─── LAYOUT ─── */
+    main { position: relative; z-index: 1; padding-top: 64px; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header { padding: 4rem 0 2.5rem; }
+    .page-tag { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .75rem; color: var(--hl); margin-bottom: .75rem; }
+    .page-tag::before { content: '//'; opacity: .5; }
+    h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; line-height: 1.1; margin-bottom: 1rem; }
+    h1 .hl { color: var(--hl); }
+    .intro { color: var(--muted); max-width: 560px; font-size: .95rem; }
+
+    /* ─── PROFIL HERO ─── */
+    .profil-hero {
+      display: grid; grid-template-columns: auto 1fr; gap: 2.5rem;
+      align-items: start; margin-bottom: 3rem;
+    }
+    @media (max-width: 600px) { .profil-hero { grid-template-columns: 1fr; } }
+
+    .profil-photo {
+      width: 160px; height: 190px; border-radius: 14px;
+      background: var(--bg2); border: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: .5rem; flex-shrink: 0;
+      position: relative; overflow: hidden;
+    }
+    .profil-photo::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(118,181,245,.06) 0%, transparent 60%);
+    }
+    .photo-icon { font-size: 2.5rem; }
+    .photo-hint { font-size: .65rem; color: var(--muted); font-family: var(--mono); text-align: center; line-height: 1.4; padding: 0 .5rem; }
+
+    .profil-info { display: flex; flex-direction: column; gap: .75rem; }
+    .profil-name { font-size: 1.6rem; font-weight: 800; }
+    .profil-name .hl { color: var(--hl); }
+    .profil-title {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(118,181,245,.08); border: 1px solid rgba(118,181,245,.15);
+      color: var(--hl); font-size: .82rem; font-weight: 500;
+      padding: .3rem .85rem; border-radius: 20px; width: fit-content;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #48dc9c; animation: pulse 2s infinite; }
+    .profil-desc { color: var(--muted); font-size: .9rem; line-height: 1.75; max-width: 500px; }
+    .profil-desc strong { color: var(--text); }
+
+    .profil-links { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: .25rem; }
+    .profil-link {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .82rem; color: var(--muted); text-decoration: none;
+      background: var(--bg2); border: 1px solid var(--border);
+      padding: .3rem .8rem; border-radius: 6px;
+      transition: color .2s, border-color .2s;
+    }
+    .profil-link:hover { color: var(--text); border-color: rgba(118,181,245,.3); }
+    .profil-link span { font-family: var(--mono); font-size: .7rem; color: var(--hl); }
+
+    /* ─── SECTION HEADING ─── */
+    .section-heading { margin-bottom: 1.5rem; }
+    .section-tag { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .75rem; color: var(--hl); margin-bottom: .5rem; }
+    .section-tag::before { content: '//'; opacity: .5; }
+    h2 { font-size: 1.5rem; font-weight: 700; }
+    h2 .hl { color: var(--hl); }
+
+    /* ─── TIMELINE EXPÉRIENCES ─── */
+    .timeline-section { padding: 1rem 0 3rem; }
+    .timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
+    .timeline::before {
+      content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px;
+      width: 1px; background: var(--border);
+    }
+
+    .tl-item { display: grid; grid-template-columns: 24px 1fr; gap: 1.25rem; padding-bottom: 2rem; }
+    .tl-dot {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--bg2); border: 2px solid var(--hl);
+      flex-shrink: 0; margin-top: 2px; position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tl-dot-inner { width: 8px; height: 8px; border-radius: 50%; background: var(--hl); }
+
+    .tl-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem 1.4rem;
+      transition: border-color .2s;
+    }
+    .tl-card:hover { border-color: rgba(118,181,245,.2); }
+
+    .tl-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: .4rem; }
+    .tl-role { font-size: .95rem; font-weight: 700; }
+    .tl-date { font-family: var(--mono); font-size: .72rem; color: var(--muted); white-space: nowrap; }
+    .tl-company { font-size: .83rem; color: var(--hl); font-weight: 600; margin-bottom: .5rem; }
+    .tl-type {
+      display: inline-block; font-size: .68rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .05em;
+      padding: .15rem .5rem; border-radius: 4px; margin-left: .5rem;
+    }
+    .type-alt { background: rgba(72,220,156,.12); color: #48dc9c; }
+    .type-cdd { background: rgba(180,160,250,.12); color: #b4a0fa; }
+
+    .tl-tasks { list-style: none; display: flex; flex-direction: column; gap: .25rem; }
+    .tl-tasks li { font-size: .84rem; color: var(--muted); display: flex; gap: .5rem; align-items: flex-start; }
+    .tl-tasks li::before { content: '▸'; color: var(--hl); font-size: .72rem; margin-top: 4px; flex-shrink: 0; }
+
+    /* ─── FORMATION ─── */
+    .formation-section { padding: 1rem 0 3rem; }
+    .formation-grid { display: flex; flex-direction: column; gap: 1rem; }
+
+    .formation-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent, #76b5f5);
+      border-radius: 10px; padding: 1.25rem 1.4rem;
+    }
+    .formation-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: .3rem; }
+    .formation-diploma { font-size: .95rem; font-weight: 700; }
+    .formation-date { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+    .formation-school { font-size: .83rem; color: var(--accent, #76b5f5); font-weight: 600; }
+
+    /* ─── LANGUES & PASSIONS ─── */
+    .extra-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 3rem; }
+    @media (max-width: 500px) { .extra-grid { grid-template-columns: 1fr; } }
+
+    .extra-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+    .extra-title { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--hl); font-family: var(--mono); margin-bottom: 1rem; }
+    .extra-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: .6rem; }
+    .extra-item:last-child { margin-bottom: 0; }
+    .extra-label { font-size: .88rem; font-weight: 600; }
+    .extra-level { font-size: .78rem; color: var(--muted); font-family: var(--mono); }
+    .lang-bar { height: 3px; background: var(--bg3); border-radius: 2px; margin-top: .2rem; }
+    .lang-fill { height: 100%; border-radius: 2px; background: var(--hl); }
+
+    .passion-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .passion-tag { font-size: .82rem; background: var(--bg3); border: 1px solid var(--border); color: var(--muted); padding: .3rem .75rem; border-radius: 20px; }
+
+    /* ─── FOOTER ─── */
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 3rem 1.5rem 2rem; }
+    .footer-inner { max-width: 900px; margin: 0 auto; }
+    .footer-line { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+    .footer-line::before, .footer-line::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .line-tag { font-family: var(--mono); font-size: .7rem; color: var(--muted); }
+    .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; } }
+    .brand-logo { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--text); text-decoration: none; display: block; margin-bottom: .5rem; }
+    .brand-hl { color: var(--hl); }
+    .brand-desc { font-size: .82rem; color: var(--muted); line-height: 1.5; margin-bottom: .5rem; }
+    .brand-location { display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--muted); }
+    .loc-dot { color: var(--hl); }
+    .col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .75rem; }
+    .col-links { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+    .col-link { font-size: .85rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .col-link:hover { color: var(--text); }
+    .social { display: flex; align-items: center; gap: .4rem; }
+    .social-tag { font-family: var(--mono); font-size: .7rem; background: var(--bg3); padding: .1rem .35rem; border-radius: 4px; color: var(--hl); }
+    .footer-bottom { display: flex; align-items: center; gap: .75rem; font-size: .8rem; color: var(--muted); flex-wrap: wrap; }
+    .footer-sep { opacity: .4; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #48dc9c; display: inline-block; margin-right: .3rem; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="index.html" class="logo"><span class="logo-name">Bineta<span class="logo-hl">.io</span></span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link"><span class="nav-tag">~</span> Accueil</a></li>
+      <li><a href="about.html" class="nav-link active"><span class="nav-tag">01</span> Moi</a></li>
+      <li><a href="competences.html" class="nav-link"><span class="nav-tag">02</span> Compétences</a></li>
+      <li><a href="projets.html" class="nav-link"><span class="nav-tag">03</span> Projets</a></li>
+      <li><a href="contact.html" class="nav-link"><span class="nav-tag">04</span> Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-overlay" id="mobile-overlay">
+    <a href="index.html" class="mobile-link"><span class="mobile-tag">~</span> Accueil</a>
+    <a href="about.html" class="mobile-link"><span class="mobile-tag">01</span> Moi</a>
+    <a href="competences.html" class="mobile-link"><span class="mobile-tag">02</span> Compétences</a>
+    <a href="projets.html" class="mobile-link"><span class="mobile-tag">03</span> Projets</a>
+    <a href="contact.html" class="mobile-link"><span class="mobile-tag">04</span> Contact</a>
+  </div>
+
+  <div class="glow-a"></div>
+  <div class="glow-b"></div>
+
+  <main>
+    <div class="container">
+
+      <!-- PAGE HEADER -->
+      <section class="page-header">
+        <span class="page-tag">à propos</span>
+        <h1>Qui <span class="hl">suis-je ?</span></h1>
+        <p class="intro">Mon parcours, ma formation et mes expériences professionnelles.</p>
+      </section>
+
+      <!-- PROFIL -->
+      <div class="profil-hero">
+        <div class="profil-photo">
+          <!--
+            POUR AJOUTER TA PHOTO :
+            Remplace ce bloc par :
+            <img src="assets/img/photo.jpg" alt="Bineta Diop"
+                 style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
+          -->
+          <span class="photo-icon">👤</span>
+          <span class="photo-hint">Ta photo ici<br>assets/img/photo.jpg</span>
+        </div>
+
+        <div class="profil-info">
+          <div class="profil-name">Bineta <span class="hl">Diop</span></div>
+          <div class="profil-title">
+            <span class="badge-dot"></span>
+            Alternante Ingénieur Support Informatique
+          </div>
+          <p class="profil-desc">
+            Étudiante en <strong>BUT Réseaux & Télécommunications</strong> parcours ROM à l'IUT de Roanne,
+            je suis passionnée par l'administration système, la supervision d'infrastructures
+            et les réseaux. Je cherche une alternance dès <strong>septembre 2026</strong> en
+            Master 1 Systèmes, Réseaux & Cloud.
+          </p>
+          <div class="profil-links">
+            <a href="https://linkedin.com/in/binetadiop-764b052bb" class="profil-link" target="_blank">
+              <span>in</span> LinkedIn
+            </a>
+            <a href="mailto:binetaadiop425@gmail.com" class="profil-link">
+              <span>@</span> binetaadiop425@gmail.com
+            </a>
+            <a href="tel:+33744711727" class="profil-link">
+              <span>☎</span> +33 7 44 71 17 27
+            </a>
+            <a href="assets/docs/cv.pdf" class="profil-link" target="_blank">
+              <span>↓</span> Télécharger mon CV
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXPÉRIENCES -->
+      <section class="timeline-section">
+        <div class="section-heading">
+          <span class="section-tag">parcours pro</span>
+          <h2>Expériences <span class="hl">Professionnelles</span></h2>
+        </div>
+
+        <div class="timeline">
+
+          <!-- Alternance Station Animation -->
+          <div class="tl-item">
+            <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+            <div class="tl-card">
+              <div class="tl-top">
+                <span class="tl-role">Administrateur Système & Réseau <span class="tl-type type-alt">Alternance</span></span>
+                <span class="tl-date">Fév. 2025 — Aujourd'hui · 10 mois</span>
+              </div>
+              <div class="tl-company">La Station Animation — Aubervilliers</div>
+              <ul class="tl-tasks">
+                <li>Installation et mise en service de postes (matériel et périphériques)</li>
+                <li>Déploiement de logiciels, réglages et mises à jour</li>
+                <li>Création et gestion des comptes Active Directory</li>
+                <li>Assistance aux utilisateurs, diagnostic et résolution des incidents</li>
+                <li>Suivi et maintien du parc informatique opérationnel</li>
+                <li>Création de comptes VPN et règles sur le pare-feu</li>
+                <li>Mise en place de solutions de télétravail pour les équipes à distance</li>
+                <li>Gestion des licences et conformité</li>
+                <li>Mise en place solution de supervision Zabbix (SAÉ 5)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Projet réseau informatique IUT -->
+          <div class="tl-item">
+            <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+            <div class="tl-card">
+              <div class="tl-top">
+                <span class="tl-role">Responsable de Projet Réseau Informatique <span class="tl-type type-cdd">CDD</span></span>
+                <span class="tl-date">Oct. — Nov. 2024 · 2 mois</span>
+              </div>
+              <div class="tl-company">IUT de Roanne</div>
+              <ul class="tl-tasks">
+                <li>Élaboration d'un schéma IP avec subnetting optimisé</li>
+                <li>Mise en place d'Active Directory Domain Services et gestion des accès</li>
+                <li>DNS redondant (primaire/secondaire) sous VMware</li>
+                <li>Hébergement d'un site web en local pour tests et intranet</li>
+                <li>Routage dynamique assuré via RIP et OSPF</li>
+                <li>DHCP pour l'attribution automatique et contrôlée des adresses</li>
+                <li>Mise en service de RADIUS et d'une solution de messagerie</li>
+                <li>Suivi des performances via Grafana/Zabbix</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Projet téléphonie IUT -->
+          <div class="tl-item">
+            <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+            <div class="tl-card">
+              <div class="tl-top">
+                <span class="tl-role">Responsable de Projet Service de Téléphonie <span class="tl-type type-cdd">CDD</span></span>
+                <span class="tl-date">Sept. — Oct. 2024 · 2 mois</span>
+              </div>
+              <div class="tl-company">IUT de Roanne</div>
+              <ul class="tl-tasks">
+                <li>Administration 3CX — paramétrage des extensions, groupes et SDA</li>
+                <li>Planification et exécution de sauvegardes</li>
+                <li>Suivi en temps réel des statuts utilisateurs</li>
+                <li>Configuration du pare-feu et contrôle des accès</li>
+                <li>Support aux équipes terrain pour garantir la continuité des appels</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- FORMATION -->
+      <section class="formation-section">
+        <div class="section-heading">
+          <span class="section-tag">formation</span>
+          <h2>Mon <span class="hl">Parcours académique</span></h2>
+        </div>
+
+        <div class="formation-grid">
+
+          <div class="formation-card" style="--accent:#76b5f5">
+            <div class="formation-top">
+              <span class="formation-diploma">BUT Réseaux & Télécommunications — Parcours ROM</span>
+              <span class="formation-date">Depuis 2023</span>
+            </div>
+            <div class="formation-school">Université Jean Monnet — IUT de Roanne</div>
+          </div>
+
+          <div class="formation-card" style="--accent:#b4a0fa">
+            <div class="formation-top">
+              <span class="formation-diploma">Licence Mathématiques Physiques Informatique</span>
+              <span class="formation-date">2022 — 2023</span>
+            </div>
+            <div class="formation-school">UCAD — Sénégal</div>
+          </div>
+
+          <div class="formation-card" style="--accent:#48dc9c">
+            <div class="formation-top">
+              <span class="formation-diploma">Baccalauréat Sciences Expérimentales</span>
+              <span class="formation-date">2021 — 2022</span>
+            </div>
+            <div class="formation-school">Collège Saint Gabriel — Sénégal</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- LANGUES & PASSIONS -->
+      <div class="extra-grid">
+
+        <div class="extra-card">
+          <div class="extra-title">// Langues</div>
+          <div>
+            <div class="extra-item">
+              <span class="extra-label">Français</span>
+              <span class="extra-level">Courant</span>
+            </div>
+            <div class="lang-bar"><div class="lang-fill" style="width:95%"></div></div>
+          </div>
+          <div style="margin-top:.75rem">
+            <div class="extra-item">
+              <span class="extra-label">Anglais</span>
+              <span class="extra-level">Intermédiaire</span>
+            </div>
+            <div class="lang-bar"><div class="lang-fill" style="width:55%;background:#b4a0fa"></div></div>
+          </div>
+        </div>
+
+        <div class="extra-card">
+          <div class="extra-title">// Passions</div>
+          <div class="passion-list">
+            <span class="passion-tag">📚 Lecture</span>
+            <span class="passion-tag">🍳 Cuisine</span>
+            <span class="passion-tag">🌐 Réseaux</span>
+            <span class="passion-tag">💻 Linux</span>
+            <span class="passion-tag">☁️ Cloud</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-line"><span class="line-tag">END</span></div>
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="brand-logo">Bineta<span class="brand-hl">.io</span></a>
+          <p class="brand-desc">Étudiante BUT R&T — Parcours ROM<br>Alternante ingénieur support informatique</p>
+          <span class="brand-location"><span class="loc-dot">◉</span> Aubervilliers / Île-de-France</span>
+        </div>
+        <div>
+          <h4 class="col-title">Navigation</h4>
+          <ul class="col-links">
+            <li><a href="index.html" class="col-link">Accueil</a></li>
+            <li><a href="competences.html" class="col-link">Compétences</a></li>
+            <li><a href="projets.html" class="col-link">Projets</a></li>
+            <li><a href="contact.html" class="col-link">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="col-title">Réseaux</h4>
+          <ul class="col-links">
+            <li><a href="https://linkedin.com/in/binetadiop-764b052bb" class="col-link social" target="_blank"><span class="social-tag">in</span> LinkedIn</a></li>
+            <li><a href="mailto:binetaadiop425@gmail.com" class="col-link social"><span class="social-tag">@</span> Email</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Bineta Diop</span>
+        <span class="footer-sep">·</span>
+        <span>BUT R&T — IUT de Roanne</span>
+        <span class="footer-sep">·</span>
+        <span><span class="status-dot"></span>En ligne</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+    const btn = document.getElementById('hamburger');
+    const overlay = document.getElementById('mobile-overlay');
+    let open = false;
+    btn.addEventListener('click', () => {
+      open = !open;
+      btn.classList.toggle('is-open', open);
+      overlay.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    overlay.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+      open = false; btn.classList.remove('is-open'); overlay.classList.remove('is-open'); document.body.style.overflow = '';
+    }));
+  </script>
+
+</body>
+</html>
