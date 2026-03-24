@@ -18,7 +18,7 @@
       --border:   rgba(255,255,255,0.07);
       --text:     #e2e4ec;
       --muted:    #8b909e;
-      --hl:       #76b5f5;
+      --hl:       #A855F7;
       --font:     'Inter', sans-serif;
       --mono:     'Fira Code', monospace;
     }
@@ -60,10 +60,11 @@
       padding: .4rem .75rem; border-radius: 6px;
       font-size: .85rem; font-weight: 500;
       color: var(--muted); text-decoration: none;
-      transition: color .2s, background .2s;
+      transition: color .2s, background .2s, border-color .2s;
+      border: 1px solid rgba(255,255,255,.1);
     }
-    .nav-link:hover, .nav-link.active { color: var(--text); background: rgba(255,255,255,.05); }
-    .nav-link.active { color: var(--hl); }
+    .nav-link:hover, .nav-link.active { color: var(--text); background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.2); }
+    .nav-link.active { color: var(--hl); border-color: var(--hl); }
     .nav-tag { font-family: var(--mono); font-size: .75rem; color: var(--hl); opacity: .7; }
 
     .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .5rem; }
@@ -95,8 +96,8 @@
       pointer-events: none; z-index: 0;
       filter: blur(120px); opacity: .12;
     }
-    .glow-a { width: 500px; height: 500px; background: #3b6fd4; top: -100px; left: -100px; }
-    .glow-b { width: 400px; height: 400px; background: #1a4fa8; bottom: 10%; right: -100px; }
+    .glow-a { width: 500px; height: 500px; background: #7C3AED; top: -100px; left: -100px; }
+    .glow-b { width: 400px; height: 400px; background: #5B21B6; bottom: 10%; right: -100px; }
 
     /* ─── LAYOUT ─── */
     main { position: relative; z-index: 1; padding-top: 64px; }
@@ -347,6 +348,113 @@
         </div>
       </section>
 
+      <!-- SOFT SKILLS / COMPÉTENCES TRANSVERSALES -->
+      <section class="skills-section">
+        <div class="section-heading">
+          <span class="page-tag">transversales</span>
+          <h2>Compétences <span class="hl">Transversales</span></h2>
+        </div>
+        <div class="skills-grid">
+
+          <div class="skill-card" style="--accent: #76b5f5">
+            <div class="skill-card-header">
+              <span class="skill-icon">💬</span>
+              <h3>Communication</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Présentation de projets techniques</span></li>
+              <li><span class="skill-bullet">▸</span><span>Rédaction de documentation claire</span></li>
+              <li><span class="skill-bullet">▸</span><span>Écoute active et feedback</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #48dc9c">
+            <div class="skill-card-header">
+              <span class="skill-icon">🤝</span>
+              <h3>Travail en équipe</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Collaboration en mode Scrum</span></li>
+              <li><span class="skill-bullet">▸</span><span>Partage de connaissances</span></li>
+              <li><span class="skill-bullet">▸</span><span>Intégration rapide en équipe</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #ff9f70">
+            <div class="skill-card-header">
+              <span class="skill-icon">🔄</span>
+              <h3>Adaptabilité</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Apprentissage rapide de nouvelles technologies</span></li>
+              <li><span class="skill-bullet">▸</span><span>Flexibilité face aux changements</span></li>
+              <li><span class="skill-bullet">▸</span><span>Gestion des priorités variables</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #b4a0fa">
+            <div class="skill-card-header">
+              <span class="skill-icon">⚡</span>
+              <h3>Gestion du stress</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Maintien du calme sous pression</span></li>
+              <li><span class="skill-bullet">▸</span><span>Gestion des incidents critiques</span></li>
+              <li><span class="skill-bullet">▸</span><span>Résilience face aux défis</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #f5d76e">
+            <div class="skill-card-header">
+              <span class="skill-icon">🎯</span>
+              <h3>Sens du service client</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Support utilisateur empathique</span></li>
+              <li><span class="skill-bullet">▸</span><span>Résolution rapide des problèmes</span></li>
+              <li><span class="skill-bullet">▸</span><span>Proactivité et amélioration continue</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #f07070">
+            <div class="skill-card-header">
+              <span class="skill-icon">🚀</span>
+              <h3>Autonomie & initiative</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Travail autonome et responsable</span></li>
+              <li><span class="skill-bullet">▸</span><span>Prise d'initiative et propositions</span></li>
+              <li><span class="skill-bullet">▸</span><span>Auto-formation et curiosité</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #76b5f5">
+            <div class="skill-card-header">
+              <span class="skill-icon">🔍</span>
+              <h3>Résolution de problèmes</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Analyse systématique des incidents</span></li>
+              <li><span class="skill-bullet">▸</span><span>Pensée logique et méthodique</span></li>
+              <li><span class="skill-bullet">▸</span><span>Recherche de solutions innovantes</span></li>
+            </ul>
+          </div>
+
+          <div class="skill-card" style="--accent: #48dc9c">
+            <div class="skill-card-header">
+              <span class="skill-icon">✅</span>
+              <h3>Rigueur & organisation</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span class="skill-bullet">▸</span><span>Attention aux détails</span></li>
+              <li><span class="skill-bullet">▸</span><span>Respect des délais et planification</span></li>
+              <li><span class="skill-bullet">▸</span><span>Documentation et traçabilité</span></li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
       <!-- RÉFÉRENTIEL BUT ROM -->
       <section class="referentiel-section">
         <div class="section-heading">
@@ -462,8 +570,8 @@
       <div class="footer-grid">
         <div>
           <a href="index.html" class="brand-logo">Bineta<span class="brand-hl">.io</span></a>
-          <p class="brand-desc">Étudiante BUT R&T — Parcours ROM<br>Alternante ingénieur support informatique</p>
-          <span class="brand-location"><span class="loc-dot">◉</span>/ Roanne</span>
+          <p class="brand-desc">Étudiante BUT R&T — Parcours ROM<br>Alternante Technicienne support informatique</p>
+          <span class="brand-location"><span class="loc-dot">◉</span>Aubervilliers/ Roanne</span>
         </div>
         <div>
           <h4 class="col-title">Navigation</h4>

@@ -18,7 +18,7 @@
       --border: rgba(255,255,255,0.07);
       --text:   #e2e4ec;
       --muted:  #8b909e;
-      --hl:     #76b5f5;
+      --hl:     #A855F7;
       --font:   'Inter', sans-serif;
       --mono:   'Fira Code', monospace;
     }
@@ -39,9 +39,9 @@
     .logo-name { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--text); }
     .logo-hl { color: var(--hl); }
     .nav-links { display: flex; gap: .25rem; list-style: none; }
-    .nav-link { display: flex; align-items: center; gap: .4rem; padding: .4rem .75rem; border-radius: 6px; font-size: .85rem; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s, background .2s; }
-    .nav-link:hover { color: var(--text); background: rgba(255,255,255,.05); }
-    .nav-link.active { color: var(--hl); background: rgba(118,181,245,.07); }
+    .nav-link { display: flex; align-items: center; gap: .4rem; padding: .4rem .75rem; border-radius: 6px; font-size: .85rem; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s, background .2s, border-color .2s; border: 1px solid rgba(255,255,255,.1); }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.2); }
+    .nav-link.active { color: var(--hl); background: rgba(118,181,245,.07); border-color: var(--hl); }
     .nav-tag { font-family: var(--mono); font-size: .75rem; color: var(--hl); opacity: .7; }
     .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .5rem; }
     .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
@@ -57,8 +57,8 @@
 
     /* ─── GLOW ─── */
     .glow-a, .glow-b { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(130px); opacity: .12; }
-    .glow-a { width: 600px; height: 600px; background: #2a5cb8; top: -150px; left: -150px; }
-    .glow-b { width: 450px; height: 450px; background: #1a4fa8; bottom: 5%; right: -120px; }
+    .glow-a { width: 600px; height: 600px; background: #7C3AED; top: -150px; left: -150px; }
+    .glow-b { width: 450px; height: 450px; background: #5B21B6; bottom: 5%; right: -120px; }
 
     /* ─── LAYOUT ─── */
     main { position: relative; z-index: 1; padding-top: 64px; }
@@ -201,11 +201,11 @@
   <nav id="navbar">
     <a href="index.html" class="logo"><span class="logo-name">Bineta<span class="logo-hl">.io</span></span></a>
     <ul class="nav-links">
-      <li><a href="index.html" class="nav-link"><span class="nav-tag">~</span> Accueil</a></li>
-      <li><a href="about.html" class="nav-link"><span class="nav-tag">01</span> Moi</a></li>
-      <li><a href="competences.html" class="nav-link"><span class="nav-tag">02</span> Compétences</a></li>
-      <li><a href="projets.html" class="nav-link"><span class="nav-tag">03</span> Projets</a></li>
-      <li><a href="contact.html" class="nav-link active"><span class="nav-tag">04</span> Contact</a></li>
+      <li><a href="index.html" class="nav-link"><span class="nav-tag"></span> Accueil</a></li>
+      <li><a href="about.html" class="nav-link"><span class="nav-tag"></span> Moi</a></li>
+      <li><a href="competences.html" class="nav-link"><span class="nav-tag"></span> Compétences</a></li>
+      <li><a href="projets.html" class="nav-link"><span class="nav-tag"></span> Projets</a></li>
+      <li><a href="contact.html" class="nav-link active"><span class="nav-tag"></span> Contact</a></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -213,11 +213,11 @@
   </nav>
 
   <div class="mobile-overlay" id="mobile-overlay">
-    <a href="index.html" class="mobile-link"><span class="mobile-tag">~</span> Accueil</a>
-    <a href="about.html" class="mobile-link"><span class="mobile-tag">01</span> Moi</a>
-    <a href="competences.html" class="mobile-link"><span class="mobile-tag">02</span> Compétences</a>
-    <a href="projets.html" class="mobile-link"><span class="mobile-tag">03</span> Projets</a>
-    <a href="contact.html" class="mobile-link"><span class="mobile-tag">04</span> Contact</a>
+    <a href="index.html" class="mobile-link"><span class="mobile-tag"></span> Accueil</a>
+    <a href="about.html" class="mobile-link"><span class="mobile-tag"></span> Moi</a>
+    <a href="competences.html" class="mobile-link"><span class="mobile-tag"></span> Compétences</a>
+    <a href="projets.html" class="mobile-link"><span class="mobile-tag"></span> Projets</a>
+    <a href="contact.html" class="mobile-link"><span class="mobile-tag"></span> Contact</a>
   </div>
 
   <div class="glow-a"></div>
@@ -230,7 +230,7 @@
       <section class="page-header">
         <span class="page-tag">contact</span>
         <h1>Me <span class="hl">Contacter</span></h1>
-        <p class="intro">Disponible pour une alternance dès septembre 2026 en Master 1 Systèmes, Réseaux & Cloud. N'hésite pas à me contacter !</p>
+        <p class="intro">Disponible pour une alternance dès septembre 2026 en Master 1 Expert Architecte Virtualisation &Cloud. N'hésite pas à me contacter !</p>
       </section>
 
       <!-- BADGE DISPONIBILITÉ -->
@@ -334,8 +334,8 @@
       <div class="footer-grid">
         <div>
           <a href="index.html" class="brand-logo">Bineta<span class="brand-hl">.io</span></a>
-          <p class="brand-desc">Étudiante BUT R&T — Parcours ROM<br>Alternante ingénieur support informatique</p>
-          <span class="brand-location"><span class="loc-dot">◉</span>/ Roanne</span>
+          <p class="brand-desc">Étudiante BUT R&T — Parcours ROM<br>Alternante Technicienne support informatique</p>
+          <span class="brand-location"><span class="loc-dot">◉</span>Aubervilliers / Roanne</span>
         </div>
         <div>
           <h4 class="col-title">Navigation</h4>
@@ -358,7 +358,7 @@
       <div class="footer-bottom">
         <span>© 2026 Bineta Diop</span>
         <span class="footer-sep">·</span>
-        <span>BUT R&T — IUT de Roanne</span>
+        <span>Fait avec HTML/CSS & ☕</span>
       </div>
     </div>
   </footer>
